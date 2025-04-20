@@ -1,67 +1,60 @@
 package br.com.mangarosa.collections;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class ListaReproducao {
     private String titulo;
-    private List<Musica> musicas;
+    private ListaEncadeada lista;
 
     public ListaReproducao(String titulo) {
         this.titulo = titulo;
-        this.musicas = new ArrayList<>();
+        this.lista = new ListaEncadeada();
     }
 
     public void addMusica(Musica musica) {
-        musicas.add(musica);
+        lista.append(musica);
     }
 
     public boolean removerMusica(int posicao) {
-        if (posicao < 0 || posicao >= musicas.size()) {
-            return false;
-        }
-        musicas.remove(posicao);
-        return true;
+        return lista.remove(posicao);
     }
 
     public void inserirMusicaEm(int posicao, Musica musica) {
-        if (posicao < 0 || posicao > musicas.size()) {
-            throw new IndexOutOfBoundsException("Posição inválida: " + posicao);
-        }
-        musicas.add(posicao, musica);
+        lista.insertAt(posicao, musica);
     }
 
     public boolean isVazia() {
-        return musicas.isEmpty();
+        return lista.isEmpty();
     }
 
     public int tamanho() {
-        return musicas.size();
+        return lista.size();
     }
 
     public void criarListaApartirDe(ListaReproducao outra) {
-        this.musicas.clear();
-        this.musicas.addAll(outra.musicas);
+        lista.clear();
+        for (int i = 0; i < outra.tamanho(); i++) {
+            lista.append(outra.obterMusica(i));
+        }
     }
 
     public int posicaoDa(Musica musica) {
-        return musicas.indexOf(musica);
+        return lista.indexOf(musica);
     }
 
     public boolean contemMusica(Musica musica) {
-        return musicas.contains(musica);
+        return lista.contains(musica);
     }
 
     public boolean limparLista() {
-        musicas.clear();
-        return true;
+        return lista.clear();
     }
 
     public Musica obterMusica(int posicao) {
-        if (posicao < 0 || posicao >= musicas.size()) {
-            return null;
+        Object obj = lista.get(posicao);
+        if (obj instanceof Musica) {
+            return (Musica) obj;
         }
-        return musicas.get(posicao);
+        return null;
     }
 
     public String getTitulo() {
